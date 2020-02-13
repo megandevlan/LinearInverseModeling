@@ -78,21 +78,33 @@ def LIM(xDat,lag):
     iSortT      = eigVal_T.argsort()[::-1]
     eigVal_T    = eigVal_T[iSortT]
     v           = v[:,iSortT] 
-    
+   
+    # But modes should ultimately be sorted by decreasing decay time (i.e., decreasing values of 1/beta.real) 
+
+    # Compute Beta  
+    b_tau   = np.log(g)
+    b_alpha = b_tau/lag
+
+    # Sort data by decreasing decay time 
+    sortVal = -1/b_alpha.real              #Decay time 
+
+    iSort2 = sortVal.argsort()[::-1]      #Sorted indices 
+    u      = u[:,iSort2]
+    v      = v[:,iSort2]
+    g      = g[iSort2]
+    b_alpha = b_alpha[iSort2]
+
+    # Make diagonal array of Beta (values should be negative)
+    beta = np.zeros((nDat, nDat), complex)
+    np.fill_diagonal(beta, b_alpha)
+
+ 
     #Need to normalize u so that u_transpose*v = identitity matrix, and u*v_transpose = identity matrix as well 
     normFactors = np.dot(np.transpose(u),v)
     normU       = np.dot(u,LA.inv(normFactors))
 
     # --------------------------------------------------------------------
-    # STEP 3: Compute Beta matrix and use that to derive L and Q matrices 
-
-    # Compute beta 
-    b_tau   = np.log(g)
-    b_alpha = b_tau/lag
-    
-    # Make into diagonal array 
-    beta = np.zeros((nDat,nDat), complex)
-    np.fill_diagonal(beta, b_alpha) 
+    # STEP 3: Compute L and Q matrices 
 
     # Compute L matrix as normU * beta * v_transpose 
     L = np.dot(normU, np.dot(beta, np.transpose(v)))
