@@ -1,4 +1,7 @@
 # LinearInverseModeling
+
+<b>Official version:</b>https://github.com/noaa-psd/Linear_Inverse_Modeling
+
 Scripts to build a linear inverse model (LIM) based on an input pickle file.
 
 These scripts were initially created for analysis carried out in Fowler and Penland (2020; in prep): "Predictability of soil moisture in Northern California." They have, however, been modified to be as versatile as possible for any given user (at least in the case of LinearInverseModel.ipynb). 
